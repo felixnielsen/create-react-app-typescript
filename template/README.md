@@ -613,11 +613,11 @@ Then we can change `start` and `build` scripts to include the CSS preprocessor c
    "scripts": {
      "build-css": "node-sass-chokidar src/ -o src/",
      "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
--    "start": "react-scripts-ts start",
--    "build": "react-scripts-ts build",
-+    "start-js": "react-scripts-ts start",
+-    "start": "react-scripts-ts-build-optimised start",
+-    "build": "react-scripts-ts-build-optimised build",
++    "start-js": "react-scripts-ts-build-optimised start",
 +    "start": "npm-run-all -p watch-css start-js",
-+    "build": "npm run build-css && react-scripts-ts build",
++    "build": "npm run build-css && react-scripts-ts-build-optimised build",
      "test": "react-scripts test --env=jsdom",
      "eject": "react-scripts eject"
    }

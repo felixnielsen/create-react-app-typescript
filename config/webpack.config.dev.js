@@ -20,6 +20,7 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -116,6 +117,10 @@ module.exports = {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
+
+      // btcs react base library
+      'btcs-react-base': 'btcs-react-base/dist',
+
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).
@@ -282,7 +287,40 @@ module.exports = {
       tsconfig: paths.appTsConfig,
       tslint: paths.appTsLint,
     }),
+
+    // #buildoptimisation 1
+    new HardSourceWebpackPlugin({
+      // Either an absolute path or relative to webpack's options.context.
+      cacheDirectory: './.cache/[confighash]',
+      info: {
+        // 'none' or 'test'.
+        mode: 'none',
+        // 'debug', 'log', 'info', 'warn', or 'error'.
+        level: 'debug',
+      },
+    }),
   ],
+
+  // from here https://webpack.js.org/guides/tree-shaking/#minify-the-output
+  mode: "development",
+
+  stats: {
+    hash: true,
+    version: true,
+    timings: true,
+    assets: true,
+    chunks: true,
+    modules: true,
+    reasons: true,
+    children: true,
+    source: false,
+    errors: true,
+    errorDetails: true,
+    warnings: true,
+    publicPath: true
+  },
+
+
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.
   node: {
@@ -296,6 +334,6 @@ module.exports = {
   // splitting or minification in interest of speed. These warnings become
   // cumbersome.
   performance: {
-    hints: false,
+    hints: "warning",
   },
 };

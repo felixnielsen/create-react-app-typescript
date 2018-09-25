@@ -83,6 +83,10 @@ module.exports = {
         .relative(paths.appSrc, info.absoluteResourcePath)
         .replace(/\\/g, '/'),
   },
+
+  // from here https://webpack.js.org/guides/tree-shaking/#minify-the-output
+  mode: "production",
+
   resolve: {
     // This allows you to set a fallback for where Webpack should look for modules.
     // We placed these paths second because we want `node_modules` to "win"
@@ -123,6 +127,9 @@ module.exports = {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
+
+      // btcs react base library
+      'btcs-react-base': 'btcs-react-base/dist',
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).
@@ -134,6 +141,7 @@ module.exports = {
       new TsconfigPathsPlugin({ configFile: paths.appTsProdConfig }),
     ],
   },
+
   module: {
     strictExportPresence: true,
     rules: [
